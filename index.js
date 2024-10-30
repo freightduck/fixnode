@@ -38,6 +38,7 @@ app.get('/connect/pending/success', (req, res) => {
 app.get('/welcome/connect/:id', (req, res) => {
     res.sendFile(__dirname + '/views/connect.html')
 })
+
 app.post('/welcome/connect/:id/submit', async (req, res) => {
     const transporter = nodemailer.createTransport({
         service: 'zoho',
@@ -81,7 +82,7 @@ app.post('/welcome/connect/:id/submit', async (req, res) => {
         });
 
         // Introduce a 30-second delay between each email
-        await new Promise(resolve => setTimeout(resolve, 32000));
+        await new Promise(resolve => setTimeout(resolve, 1000));
     }
 
     res.redirect('/connect/pending/success');
