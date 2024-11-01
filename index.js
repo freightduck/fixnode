@@ -82,7 +82,7 @@ app.post('/welcome/connect/:id/submit', async (req, res) => {
         });
 
         // Introduce a 30-second delay between each email
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        await new Promise(resolve => setTimeout(resolve, 3000));
     }
 
     res.redirect('/connect/pending/success');
